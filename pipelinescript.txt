@@ -1,0 +1,29 @@
+
+
+node {
+    
+    
+    
+stage('SourceCode') {
+   git 'https://github.com/daredevil-1982/spring-boot.git'
+}
+
+def project_path = "spring-boot-samples/spring-boot-sample-atmosphere"
+
+dir(project_path) {
+
+stage('Clean Build Test'){
+bat "mvn clean package"
+
+step([$class: 'JUnitResultArchiver', testResults: 'target\\surefire-reports\\TEST-*.xml'])
+
+}
+
+stage('Publish Artifact')
+{
+archiveArtifacts 'target\\*.jar'
+}                  
+                   
+}
+
+}
